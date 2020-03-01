@@ -5,15 +5,8 @@
 #include <iostream>
 
 screen scr;
-snake player(50, 20);
-bool running;
-int fps;
-
-void init()
-{
-    running = true;
-    fps = 10;
-}
+snake player(50, 20, 1);
+int fps = 20;
 
 void input()
 {
@@ -21,17 +14,24 @@ void input()
 
     switch(key)
     {
-        case 'q':
-            running = false;
+        case 'a':
+            player.set_direction(1);
+            break;
+        case 'd':
+            player.set_direction(3);
+            break;
+        case 'w':
+            player.set_direction(2);
+            break;
+        case 's':
+            player.set_direction(4);
             break;
     }
 }
 
 int main(int argc, const char** argv)
 {  
-    init();
-
-    while(running)
+    while(player.is_alive())
     {
         clear();
 
@@ -43,6 +43,5 @@ int main(int argc, const char** argv)
         std::this_thread::sleep_for(std::chrono::milliseconds(1000/fps));
     }
     
-
     return 0;
 }
