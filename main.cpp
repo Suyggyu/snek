@@ -33,13 +33,14 @@ int main(int argc, const char** argv)
 {  
     while(player.is_alive())
     {
+        input();
+
+        player.update();
+
         clear();
 
         scr.print(player.draw());
 
-        player.update();
-
-        input();
         std::this_thread::sleep_for(std::chrono::milliseconds(1000/fps));
     }
     
