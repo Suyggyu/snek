@@ -1,5 +1,5 @@
 snek: main.o screen.o snake.o
-	g++ main.o screen.o snake.o -lncurses -o snek
+	g++ main.o screen.o snake.o -lncurses -lpthread -o snek
 
 main.o: main.cpp
 	g++ -c main.cpp

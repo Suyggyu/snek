@@ -2,11 +2,10 @@
 #include "snake.h"
 #include <chrono>
 #include <thread>
-#include <iostream>
 
 screen scr;
-snake player(50, 20, 1);
-int fps = 20;
+snake player(50, 20);
+int fps = 15;
 
 void input()
 {
