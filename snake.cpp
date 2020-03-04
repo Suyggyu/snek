@@ -2,14 +2,16 @@
 
 void snake::addTail()
 {
-    fruit.x = rand()%(mapW-2)+1;
-    fruit.y = rand()%(mapH-2)+1;
+    do{
+        fruit.x = rand()%(mapW-2)+1;
+        fruit.y = rand()%(mapH-2)+1;
+    }while(isTail(fruit.x, fruit.y));
 
-    tail.push_back(Int2 {x, y});
+    tail.push_back(Int2 {0, 0});
 }
 
 snake::snake(int mapW, int mapH)
-: mapW(mapW), mapH(mapH), direction(0), speed(1), alive(true)
+: mapW(mapW), mapH(mapH), direction(0), speed(1), alive(true), score(0)
 {
     x = mapW / 2;
     y = mapH / 2;
@@ -17,6 +19,16 @@ snake::snake(int mapW, int mapH)
     srand(time(0));
 
     addTail();
+}
+
+bool snake::isTail(int x, int y) const
+{
+    for(int i = 1; i < tail.size(); i++)
+    {
+        if(tail[i].x == x && tail[i].y == y) return true;
+    }
+
+    return false;
 }
 
 std::string snake::draw() const
@@ -36,36 +48,24 @@ std::string snake::draw() const
             }else if(a == fruit.x && b == fruit.y)
             {
                 image += 'F';
+            }else if(isTail(a, b))
+            {
+                image += 'o';
             }else{
-                bool isTail = false;
-                for(int i = 1; i < tail.size(); i++)
-                {
-                    if(tail[i].x == a && tail[i].y == b)
-                    {
-                        image += 'o';
-                        isTail = true;
-                        break;
-                    }
-                }
-
-                if(!isTail)
-                {
-                    image += ' ';
-                }
+                image += ' ';
             }
+            
         }
         image += '\n';
     }
+
+    image += "\nScore: " + std::to_string(score) + "\n";
 
     return image;
 }
 
 void snake::update()
 {
-    if(x == fruit.x && y == fruit.y)
-    {
-        addTail();
-    }
 
     for(int i = tail.size() - 1; i > 0; i--)
     {
@@ -75,36 +75,57 @@ void snake::update()
     switch(direction)
     {
         case 1:
+            if(x <= 1)
+            {
+                alive = false;
+                return;
+            }
+
             x -= speed;
             break;
         case 3:
+            if(x >= mapW - 2)
+            {
+                alive = false;
+                return;
+            }
+
             x += speed;
             break;
         case 2:
+            if(y <= 1)
+            {
+                alive = false;
+                return;
+            }
+
             y -= speed;
             break;
         case 4:
+            if(y >= mapH - 2)
+            {
+                alive = false;
+                return;
+            }
+            
             y += speed;
             break;
     }
 
+    
     tail[0] = Int2 {x, y};
 
-    for(int i = tail.size() - 1; i > 2; i--)
+    if(x == fruit.x && y == fruit.y)
     {
-        if(tail[i].x == x && tail[i].y == y)
-        {
-            alive = false;
-            return;
-        }
+        addTail();
+        score++;
     }
 
-    if(x <= 0 || y <= 0 || x >= mapW - 1 || y >= mapH - 1)
+    if(isTail(x, y) || x <= 0 || y <= 0 || x >= mapW - 1 || y >= mapH - 1)
     {
         alive = false;
     }
 }
-
 
 /**
  * Set the snake's direction:

@@ -13,15 +13,17 @@ struct Int2
 class snake
 {
     const int mapW, mapH;
-    int x, y, direction, speed;
+    int x, y, direction, speed, score;
     bool alive;
     std::vector<Int2> tail;
+    Int2 fruit;
+
     void addTail();
-    struct {int x; int y;} fruit;
+    bool isTail(int x, int y) const;
 public:
     snake(int mapW, int mapH);
     std::string draw() const;
     void set_direction(int direction);
     void update();
-    inline bool is_alive() { return alive; };
+    inline bool is_alive() const { return alive; };
 };

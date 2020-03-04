@@ -4,7 +4,7 @@
 #include <thread>
 
 screen scr;
-snake player(50, 20);
+snake player(50, 25);
 int fps = 15;
 
 void input()
@@ -42,6 +42,8 @@ int main(int argc, const char** argv)
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000/fps));
     }
-    
+
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
     return 0;
 }
