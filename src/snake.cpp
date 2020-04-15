@@ -11,7 +11,7 @@ void snake::addTail()
 }
 
 snake::snake(int mapW, int mapH)
-: mapW(mapW), mapH(mapH), direction(0), speed(1), alive(true), score(0)
+: mapW(mapW), mapH(mapH), direction(0), speed(1), score(0), alive(true)
 {
     x = mapW / 2;
     y = mapH / 2;
@@ -23,7 +23,7 @@ snake::snake(int mapW, int mapH)
 
 bool snake::isTail(int x, int y) const
 {
-    for(int i = 1; i < tail.size(); i++)
+    for(unsigned int i = 1; i < tail.size(); i++)
     {
         if(tail[i].x == x && tail[i].y == y) return true;
     }

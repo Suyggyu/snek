@@ -1,14 +1,43 @@
-snek: main.o screen.o snake.o
-	g++ main.o screen.o snake.o -lncurses -o snek
+EXE = snek
 
-main.o: main.cpp
-	g++ -c main.cpp
+SRC_DIR = src
+OBJ_DIR = obj
 
-screen.o: screen.cpp
-	g++ -c screen.cpp
+SRC := $(wildcard $(SRC_DIR)/*.cpp)
+OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-snake.o: snake.cpp
-	g++ -c snake.cpp
+PPFLAGS := -I./$(SRC_DIR)
+FLAGS = -Wall -Wextra -pedantic -O3
+
+LDLIBS = 
+LDFLAGS = -static-libstdc++ -static-libgcc
+
+.PHONY: all clean files
+
+all: $(EXE)
+
+
+ifeq ($(OS), Windows_NT)
 
 clean:
-	rm -rf *.o
+	rmdir /s /q $(OBJ_DIR)
+	del $(EXE).exe
+else
+LDLIBS += -lncurses
+
+clean:
+	rm -rf $(OBJ_DIR) $(EXE)
+endif
+
+
+$(EXE): $(OBJ)
+	g++ $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	g++ $(PPFLAGS) $(FLAGS) -c $< -o $@
+
+$(OBJ_DIR):
+	mkdir $@
+
+files:
+	@echo "exe: $(EXE)"
