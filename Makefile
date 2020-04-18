@@ -41,3 +41,5 @@ $(OBJ_DIR):
 
 files:
 	@echo "exe: $(EXE)"
+	@echo "src: $(SRC)"
+	@echo "obj: $(OBJ)"
