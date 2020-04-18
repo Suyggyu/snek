@@ -1,15 +1,5 @@
 #include "snake.h"
 
-void snake::addTail()
-{
-    do{
-        fruit.x = rand()%(mapW-2)+1;
-        fruit.y = rand()%(mapH-2)+1;
-    }while(isTail(fruit.x, fruit.y));
-
-    tail.push_back(Int2 {0, 0});
-}
-
 snake::snake(int mapW, int mapH)
 : mapW(mapW), mapH(mapH), direction(0), speed(1), score(0), alive(true)
 {
@@ -18,10 +8,20 @@ snake::snake(int mapW, int mapH)
 
     srand(time(0));
 
-    addTail();
+    AddTail();
 }
 
-bool snake::isTail(int x, int y) const
+void snake::AddTail(void)
+{
+    do{
+        fruit.x = rand()%(mapW-2)+1;
+        fruit.y = rand()%(mapH-2)+1;
+    }while(IsTail(fruit.x, fruit.y));
+
+    tail.push_back(Int2 {0, 0});
+}
+
+bool snake::IsTail(int x, int y) const
 {
     for(unsigned int i = 1; i < tail.size(); i++)
     {
@@ -31,7 +31,7 @@ bool snake::isTail(int x, int y) const
     return false;
 }
 
-std::string snake::draw() const
+std::string snake::Draw(void) const
 {
     std::string image;
 
@@ -48,7 +48,7 @@ std::string snake::draw() const
             }else if(a == fruit.x && b == fruit.y)
             {
                 image += 'F';
-            }else if(isTail(a, b))
+            }else if(IsTail(a, b))
             {
                 image += 'o';
             }else{
@@ -64,9 +64,29 @@ std::string snake::draw() const
     return image;
 }
 
-void snake::update()
+void snake::Input(char key)
 {
+    switch(key)
+    {
+        case -1:
+            break;
+        case 'a':
+            SetDirection(1);
+            break;
+        case 'w':
+            SetDirection(2);
+            break;
+        case 'd':
+            SetDirection(3);
+            break;
+        case 's':
+            SetDirection(4);
+            break;
+    }
+}
 
+void snake::Update(void)
+{
     for(int i = tail.size() - 1; i > 0; i--)
     {
         tail[i] = tail[i-1];
@@ -74,42 +94,42 @@ void snake::update()
 
     switch(direction)
     {
-        case 1:
-            if(x <= 1)
-            {
-                alive = false;
-                return;
-            }
+    case 1:
+        if(x <= 1)
+        {
+            alive = false;
+            return;
+        }
 
-            x -= speed;
-            break;
-        case 3:
-            if(x >= mapW - 2)
-            {
-                alive = false;
-                return;
-            }
+        x -= speed;
+        break;
+    case 3:
+        if(x >= mapW - 2)
+        {
+            alive = false;
+            return;
+        }
 
-            x += speed;
-            break;
-        case 2:
-            if(y <= 1)
-            {
-                alive = false;
-                return;
-            }
+        x += speed;
+        break;
+    case 2:
+        if(y <= 1)
+        {
+            alive = false;
+            return;
+        }
 
-            y -= speed;
-            break;
-        case 4:
-            if(y >= mapH - 2)
-            {
-                alive = false;
-                return;
-            }
-            
-            y += speed;
-            break;
+        y -= speed;
+        break;
+    case 4:
+        if(y >= mapH - 2)
+        {
+            alive = false;
+            return;
+        }
+        
+        y += speed;
+        break;
     }
 
     
@@ -117,11 +137,11 @@ void snake::update()
 
     if(x == fruit.x && y == fruit.y)
     {
-        addTail();
+        AddTail();
         score++;
     }
 
-    if(isTail(x, y) || x <= 0 || y <= 0 || x >= mapW - 1 || y >= mapH - 1)
+    if(IsTail(x, y) || x <= 0 || y <= 0 || x >= mapW - 1 || y >= mapH - 1)
     {
         alive = false;
     }
@@ -131,7 +151,7 @@ void snake::update()
  * Set the snake's direction:
  * 1 = left, 2 = up, 3 = right, 4 = down
  */
-void snake::set_direction(int direction)
+void snake::SetDirection(int direction)
 {
     if(direction == 1 && this->direction != 3)
     {

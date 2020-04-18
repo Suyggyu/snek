@@ -18,12 +18,14 @@ class snake
     std::vector<Int2> tail;
     Int2 fruit;
 
-    void addTail();
-    bool isTail(int x, int y) const;
+    void AddTail(void);
+    bool IsTail(int x, int y) const;
+    void SetDirection(int direction);
 public:
     snake(int mapW, int mapH);
-    std::string draw() const;
-    void set_direction(int direction);
-    void update();
-    inline bool is_alive() const { return alive; };
+    std::string Draw(void) const;
+    void Input(char key);
+    void Update(void);
+    inline bool IsAlive(void) const { return alive; }
+    inline int GetScore(void) const { return score; }
 };

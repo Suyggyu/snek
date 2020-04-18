@@ -17,13 +17,23 @@ screen::~screen(void)
     nodelay(stdscr, 0);
 }
 
-void screen::Print(std::string message)
+void screen::Sleep(int milliseconds) const
+{
+    std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+}
+
+void screen::Clear(void) const
+{
+    clear();
+}
+
+void screen::Print(const std::string& message) const
 {
     printw(message.c_str());
     refresh();    
 }
 
-char screen::GetKey(void)
+char screen::GetKey(void) const
 {
     char ch = getch();
 
@@ -48,17 +58,27 @@ screen::~screen(void)
     system("mode con:cols=120 lines=35");
 }
 
-char screen::GetKey(void)
+void screen::Sleep(int milliseconds) const
+{
+    Sleep(milliseconds);
+}
+
+void screen::Clear(void) const
+{
+    return;
+}
+
+void screen::Print(const std::string& message) const
+{
+    std::cout << message;
+}
+
+char screen::GetKey(void) const
 {
     if(_kbhit())
         return _getch();
     else
         return -1;
-}
-
-void screen::Print(std::string message)
-{
-    std::cout << message;
 }
 
 #endif
