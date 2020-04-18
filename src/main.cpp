@@ -3,6 +3,15 @@
 #include <string.h>
 #include <stdio.h>
 
+#ifdef unix
+# include <chrono>
+# include <thread>
+# define SLEEP(milliseconds) std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds))
+#elif defined(_WIN32) || defined(WIN32)
+# include <windows.h>
+# define SLEEP(milliseconds) Sleep(milliseconds)
+#endif
+
 int main(int argc, const char **argv)
 {  
     int mapW = 50, mapH = 25;
@@ -69,10 +78,10 @@ int main(int argc, const char **argv)
 
         scr.Print(player.Draw());
 
-        scr.Sleep(1000/fps);
+        SLEEP(1000/fps);
     }
 
-    scr.Sleep(2000);
+    SLEEP(2000);
 
     return 0;
 }

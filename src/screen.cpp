@@ -17,11 +17,6 @@ screen::~screen(void)
     nodelay(stdscr, 0);
 }
 
-void screen::Sleep(int milliseconds) const
-{
-    std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
-}
-
 void screen::Clear(void) const
 {
     clear();
@@ -56,11 +51,6 @@ screen::screen(int width, int height)
 screen::~screen(void)
 {
     system("mode con:cols=120 lines=35");
-}
-
-void screen::Sleep(int milliseconds) const
-{
-    Sleep(milliseconds);
 }
 
 void screen::Clear(void) const
