@@ -6,10 +6,10 @@
 #ifdef unix
 # include <chrono>
 # include <thread>
-# define SLEEP(milliseconds) std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds))
+# define SLEEP(x) std::this_thread::sleep_for(std::chrono::milliseconds(x))
 #elif defined(_WIN32) || defined(WIN32)
 # include <windows.h>
-# define SLEEP(milliseconds) Sleep(milliseconds)
+# define SLEEP(x) Sleep(x)
 #endif
 
 int main(int argc, const char **argv)
