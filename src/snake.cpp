@@ -1,7 +1,7 @@
 #include "snake.h"
 
 snake::snake(int mapW, int mapH)
-: mapW(mapW), mapH(mapH), direction(0), speed(1), score(0), alive(true)
+: mapW(mapW), mapH(mapH), direction(0), speed(1), alive(true)
 {
     x = mapW / 2;
     y = mapH / 2;
@@ -9,6 +9,7 @@ snake::snake(int mapW, int mapH)
     srand(time(0));
 
     AddTail();
+    score = 0;
 }
 
 void snake::AddTail(void)
@@ -16,9 +17,11 @@ void snake::AddTail(void)
     do{
         fruit.x = rand()%(mapW-2)+1;
         fruit.y = rand()%(mapH-2)+1;
-    }while(IsTail(fruit.x, fruit.y));
+    }while(IsTail(fruit.x, fruit.y) || (fruit.x == x && fruit.y == y));
 
     tail.push_back(Int2 {0, 0});
+
+    score++;
 }
 
 bool snake::IsTail(int x, int y) const
@@ -87,64 +90,45 @@ void snake::Input(char key)
 
 void snake::Update(void)
 {
-    for(int i = tail.size() - 1; i > 0; i--)
-    {
-        tail[i] = tail[i-1];
-    }
 
+    // Update the head
     switch(direction)
     {
     case 1:
-        if(x <= 1)
-        {
-            alive = false;
-            return;
-        }
-
         x -= speed;
         break;
     case 3:
-        if(x >= mapW - 2)
-        {
-            alive = false;
-            return;
-        }
-
         x += speed;
         break;
     case 2:
-        if(y <= 1)
-        {
-            alive = false;
-            return;
-        }
-
         y -= speed;
         break;
     case 4:
-        if(y >= mapH - 2)
-        {
-            alive = false;
-            return;
-        }
-        
         y += speed;
         break;
     }
 
+    if(x <= 0)
+        x = mapW - 2;
+    else if(x >= mapW-1)
+        x = 1;
+    else if(y <= 0)
+        y = mapH - 2;
+    else if(y >= mapH-1)
+        y = 1;
+
+    // Update the tail
+    if(x == fruit.x && y == fruit.y) AddTail();
+
+    for(int i = tail.size() - 1; i > 0; i--)
+    {
+        tail[i] = tail[i-1];
+    }
     
     tail[0] = Int2 {x, y};
-
-    if(x == fruit.x && y == fruit.y)
-    {
-        AddTail();
-        score++;
-    }
-
-    if(IsTail(x, y) || x <= 0 || y <= 0 || x >= mapW - 1 || y >= mapH - 1)
-    {
+    
+    if(IsTail(x, y))
         alive = false;
-    }
 }
 
 /**

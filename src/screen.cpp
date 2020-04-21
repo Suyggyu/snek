@@ -44,7 +44,7 @@ char screen::GetKey(void) const
 
 screen::screen(int width, int height)
 {
-    std::string resize_command = "mode con:cols=" + std::to_string(width) + " lines=" + std::to_string(height+3);
+    std::string resize_command = "mode con:cols=" + std::to_string(width+1) + " lines=" + std::to_string(height+3);
     system(resize_command.c_str());
 }
 
