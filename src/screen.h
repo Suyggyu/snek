@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _SCREEN_H
+#define _SCREEN_H
 
 #ifdef unix
 # include <ncurses.h>
@@ -17,3 +18,5 @@ struct screen
     void Print(const std::string& message) const;
     char GetKey(void) const;
 };
+
+#endif

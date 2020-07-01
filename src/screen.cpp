@@ -32,8 +32,7 @@ char screen::GetKey(void) const
 {
     char ch = getch();
 
-    if(ch != ERR)
-    {
+    if(ch != ERR){
         return ch;
     }else{
         return -1;
@@ -65,10 +64,11 @@ void screen::Print(const std::string& message) const
 
 char screen::GetKey(void) const
 {
-    if(_kbhit())
+    if(_kbhit()){
         return _getch();
-    else
+    }else{
         return -1;
+    }
 }
 
 #endif

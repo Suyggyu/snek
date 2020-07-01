@@ -1,7 +1,7 @@
 #include "snake.h"
 
-snake::snake(int mapW, int mapH)
-: mapW(mapW), mapH(mapH), direction(0), speed(1), alive(true)
+snake::snake(int mapW, int mapH, bool wrap)
+: mapW(mapW), mapH(mapH), direction(0), speed(1), alive(true), wrap(wrap)
 {
     x = mapW / 2;
     y = mapH / 2;
@@ -19,7 +19,7 @@ void snake::AddTail(void)
         fruit.y = rand()%(mapH-2)+1;
     }while(IsTail(fruit.x, fruit.y) || (fruit.x == x && fruit.y == y));
 
-    tail.push_back(Int2 {0, 0});
+    tail.push_back(Vec2i {0, 0});
 
     score++;
 }
@@ -90,6 +90,20 @@ void snake::Input(char key)
 
 void snake::Update(void)
 {
+    if(wrap)
+    {
+        if(x <= 0)
+            x = mapW - 2;
+        else if(x >= mapW-1)
+            x = 1;
+        else if(y <= 0)
+            y = mapH - 2;
+        else if(y >= mapH-1)
+            y = 1;
+    }else if((x == 1 && direction == 1) || (x == mapW - 2 && direction == 3) || (y == 1 && direction == 2) || (y == mapH - 2 && direction == 4)){
+        alive = false;
+        return;
+    }
 
     // Update the head
     switch(direction)
@@ -108,15 +122,6 @@ void snake::Update(void)
         break;
     }
 
-    if(x <= 0)
-        x = mapW - 2;
-    else if(x >= mapW-1)
-        x = 1;
-    else if(y <= 0)
-        y = mapH - 2;
-    else if(y >= mapH-1)
-        y = 1;
-
     // Update the tail
     if(x == fruit.x && y == fruit.y) AddTail();
 
@@ -125,7 +130,7 @@ void snake::Update(void)
         tail[i] = tail[i-1];
     }
     
-    tail[0] = Int2 {x, y};
+    tail[0] = Vec2i {x, y};
     
     if(IsTail(x, y))
         alive = false;

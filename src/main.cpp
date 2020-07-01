@@ -16,6 +16,7 @@ int main(int argc, const char **argv)
 {  
     int mapW = 50, mapH = 25;
     int fps = 15;
+    bool wrap = false;
 
     if(argc >= 2)
     {
@@ -30,9 +31,9 @@ int main(int argc, const char **argv)
                 exit(EXIT_SUCCESS);
             }else if(!strcmp(argv[i], "--fps"))
             {
-                if(argc <= i+1)
+                if(argv[i+1] == NULL)
                 {
-                    printf("You need to provide a value for the fps\n");
+                    printf("You need to provide a value for the fps!\n");
                     exit(EXIT_SUCCESS);
                 }
 
@@ -40,9 +41,9 @@ int main(int argc, const char **argv)
                 i++;
             }else if(!strcmp(argv[i], "--mapw"))
             {
-                if(argc <= i+1)
+                if(argv[i+1] == NULL)
                 {
-                    printf("You need to provide a value for the map width\n");
+                    printf("You need to provide a value for the map width!\n");
                     exit(EXIT_SUCCESS);
                 }
 
@@ -50,14 +51,21 @@ int main(int argc, const char **argv)
                 i++;
             }else if(!strcmp(argv[i], "--maph"))
             {
-                if(argc <= i+1)
+                if(argv[i+1] == NULL)
                 {
-                    printf("You need to provide a value for the map height\n");
+                    printf("You need to provide a value for the map height!\n");
                     exit(EXIT_SUCCESS);
                 }
 
                 mapH = atoi(argv[i+1]);
                 i++;
+            }else if(!strcmp(argv[i], "--wrap"))
+            {
+                if(argv[i+1] == NULL)
+                {
+                    printf("You need to specify if the snake should wrap arount the map!\n");
+                    exit(EXIT_SUCCESS);
+                }
             }else{
                 printf("Unknown argument '%s', try %s -h\n", argv[i], argv[0]);
                 exit(EXIT_SUCCESS);
@@ -66,7 +74,7 @@ int main(int argc, const char **argv)
     }
 
     screen scr(mapW, mapH);
-    snake player(mapW, mapH);
+    snake player(mapW, mapH, wrap);
 
     while(player.IsAlive())
     {

@@ -6,7 +6,7 @@ OBJ_DIR = obj
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-PPFLAGS := -I./$(SRC_DIR)
+PPFLAGS = 
 FLAGS = -Wall -Wextra -pedantic -O3
 
 LDLIBS = 
@@ -14,19 +14,25 @@ LDFLAGS = -static-libstdc++ -static-libgcc
 
 .PHONY: all clean files
 
-all: $(EXE)
-
 
 ifeq ($(OS), Windows_NT)
+EXE := $(EXE)_windows.exe
+
+all: $(EXE)
 
 clean:
 	rmdir /s /q $(OBJ_DIR)
-	del $(EXE).exe
+
 else
+EXE := $(EXE)_linux
 LDLIBS += -lncurses
+LDFLAGS =
+
+all: $(EXE)
 
 clean:
-	rm -rf $(OBJ_DIR) $(EXE)
+	rm -rf $(OBJ_DIR)
+
 endif
 
 
