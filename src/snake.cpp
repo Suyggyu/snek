@@ -90,17 +90,7 @@ void snake::Input(char key)
 
 void snake::Update(void)
 {
-    if(wrap)
-    {
-        if(x <= 0)
-            x = mapW - 2;
-        else if(x >= mapW-1)
-            x = 1;
-        else if(y <= 0)
-            y = mapH - 2;
-        else if(y >= mapH-1)
-            y = 1;
-    }else if((x == 1 && direction == 1) || (x == mapW - 2 && direction == 3) || (y == 1 && direction == 2) || (y == mapH - 2 && direction == 4)){
+    if(!wrap && ((x == 1 && direction == 1) || (x == mapW - 2 && direction == 3) || (y == 1 && direction == 2) || (y == mapH - 2 && direction == 4))){
         alive = false;
         return;
     }
@@ -120,6 +110,25 @@ void snake::Update(void)
     case 4:
         y += speed;
         break;
+    }
+
+    if(wrap)
+    {
+        if(x <= 0)
+        {
+            x = mapW - 2;
+        }else if(x >= mapW - 1)
+        {
+            x = 1;
+        }
+        
+        if(y <= 0)
+        {
+            y = mapH - 2;
+        }else if(y >= mapH - 1)
+        {
+            y = 1;
+        }
     }
 
     // Update the tail

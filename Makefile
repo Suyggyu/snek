@@ -1,48 +1,49 @@
 EXE = snek
 
+BIN_DIR = bin
 SRC_DIR = src
 OBJ_DIR = obj
+
+CC = g++
 
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-PPFLAGS = 
-FLAGS = -Wall -Wextra -pedantic -O3
+FLAGS = -Wall -Wextra -pedantic
 
 LDLIBS = 
-LDFLAGS = -static-libstdc++ -static-libgcc
+LDFLAGS = 
 
-.PHONY: all clean files
-
+.PHONY: all clean files release
 
 ifeq ($(OS), Windows_NT)
-EXE := $(EXE)_windows.exe
-
+EXE := $(BIN_DIR)/$(EXE)_windows.exe
 all: $(EXE)
 
 clean:
-	rmdir /s /q $(OBJ_DIR)
-
+	del $(OBJ_DIR)\*
 else
-EXE := $(EXE)_linux
-LDLIBS += -lncurses
-LDFLAGS =
-
+EXE := $(BIN_DIR)/$(EXE)_linux
 all: $(EXE)
 
-clean:
-	rm -rf $(OBJ_DIR)
+LDLIBS += -lncurses
 
+clean:
+	rm -rf $(OBJ_DIR)/*
 endif
 
+release: FLAGS = -O3
+release: LDFLAGS = -static-libstdc++ -static-libgcc
+release: clean
+release: all	
 
-$(EXE): $(OBJ)
-	g++ $(LDFLAGS) $^ $(LDLIBS) -o $@
+$(EXE): $(OBJ) | $(BIN_DIR)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	g++ $(PPFLAGS) $(FLAGS) -c $< -o $@
+	$(CC) $(FLAGS) -c $< -o $@
 
-$(OBJ_DIR):
+$(OBJ_DIR) $(BIN_DIR):
 	mkdir $@
 
 files:

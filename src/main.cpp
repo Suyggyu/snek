@@ -28,6 +28,7 @@ int main(int argc, const char **argv)
                 printf("Arguments:\n");
                 printf("%-30s set the game's frames per second (the default is %d)\n", "--fps [VALUE]", fps);
                 printf("%-30s set the game's map width/height (by default the map is %dx%d)\n", "--mapw, --maph [VALUE]", mapW, mapH);
+		printf("%-30s specify if the snake should wrap around the map", "--wrap");
                 exit(EXIT_SUCCESS);
             }else if(!strcmp(argv[i], "--fps"))
             {
@@ -61,11 +62,7 @@ int main(int argc, const char **argv)
                 i++;
             }else if(!strcmp(argv[i], "--wrap"))
             {
-                if(argv[i+1] == NULL)
-                {
-                    printf("You need to specify if the snake should wrap arount the map!\n");
-                    exit(EXIT_SUCCESS);
-                }
+		wrap = true;
             }else{
                 printf("Unknown argument '%s', try %s -h\n", argv[i], argv[0]);
                 exit(EXIT_SUCCESS);
