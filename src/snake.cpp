@@ -1,25 +1,23 @@
 #include "snake.h"
 
-snake::snake(int mapW, int mapH, bool wrap)
-: mapW(mapW), mapH(mapH), direction(0), speed(1), alive(true), wrap(wrap)
+snake::snake(screen* scr, bool wrap)
+: scr(scr), direction(0), speed(1), score(-1), alive(true), wrap(wrap)
 {
-    x = mapW / 2;
-    y = mapH / 2;
+    x = scr->width / 2;
+    y = scr->height / 2;
 
     srand(time(0));
 
-    AddTail();
-    score = 0;
+    tail.push_back(Vec2i {0, 0});
+    EatFruit();
 }
 
-void snake::AddTail(void)
+void snake::EatFruit(void)
 {
     do{
-        fruit.x = rand()%(mapW-2)+1;
-        fruit.y = rand()%(mapH-2)+1;
+        fruit.x = rand()%(scr->width-2)+1;
+        fruit.y = rand()%(scr->height-2)+1;
     }while(IsTail(fruit.x, fruit.y) || (fruit.x == x && fruit.y == y));
-
-    tail.push_back(Vec2i {0, 0});
 
     score++;
 }
@@ -38,11 +36,11 @@ std::string snake::Draw(void) const
 {
     std::string image;
 
-    for(int b = 0; b < mapH; b++)
+    for(int b = 0; b < scr->height; b++)
     {
-        for(int a = 0; a < mapW; a++)
+        for(int a = 0; a < scr->width; a++)
         {
-            if(a == 0 || b == 0 || a == mapW - 1 || b == mapH - 1)
+            if(a == 0 || b == 0 || a == scr->width - 1 || b == scr->height - 1)
             {
                 image += '#';
             }else if(a == x && b == y)
@@ -67,9 +65,9 @@ std::string snake::Draw(void) const
     return image;
 }
 
-void snake::Input(char key)
+void snake::Input(void)
 {
-    switch(key)
+    switch(scr->GetKey())
     {
         case -1:
             break;
@@ -90,7 +88,7 @@ void snake::Input(char key)
 
 void snake::Update(void)
 {
-    if(!wrap && ((x == 1 && direction == 1) || (x == mapW - 2 && direction == 3) || (y == 1 && direction == 2) || (y == mapH - 2 && direction == 4))){
+    if(!wrap && ((x == 1 && direction == 1) || (x == scr->width - 2 && direction == 3) || (y == 1 && direction == 2) || (y == scr->height - 2 && direction == 4))){
         alive = false;
         return;
     }
@@ -116,23 +114,23 @@ void snake::Update(void)
     {
         if(x <= 0)
         {
-            x = mapW - 2;
-        }else if(x >= mapW - 1)
+            x = scr->width - 2;
+        }else if(x >= scr->width - 1)
         {
             x = 1;
         }
         
         if(y <= 0)
         {
-            y = mapH - 2;
-        }else if(y >= mapH - 1)
+            y = scr->height - 2;
+        }else if(y >= scr->height - 1)
         {
             y = 1;
         }
     }
 
     // Update the tail
-    if(x == fruit.x && y == fruit.y) AddTail();
+    if(x == fruit.x && y == fruit.y) tail.push_back(Vec2i {0, 0});
 
     for(int i = tail.size() - 1; i > 0; i--)
     {
@@ -143,6 +141,8 @@ void snake::Update(void)
     
     if(IsTail(x, y))
         alive = false;
+
+    if(x == fruit.x && y == fruit.y) EatFruit();
 }
 
 /**

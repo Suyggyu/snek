@@ -2,6 +2,7 @@
 
 #ifdef unix
 screen::screen(int width, int height)
+: width(width), height(height)
 {
     initscr();
     noecho();
@@ -42,6 +43,7 @@ char screen::GetKey(void) const
 #elif defined(_WIN32) || defined(WIN32)
 
 screen::screen(int width, int height)
+: width(width), height(height)
 {
     std::string resize_command = "mode con:cols=" + std::to_string(width+1) + " lines=" + std::to_string(height+3);
     system(resize_command.c_str());
@@ -49,7 +51,7 @@ screen::screen(int width, int height)
 
 screen::~screen(void)
 {
-    system("mode con:cols=120 lines=35");
+    system("mode con:cols=120 lines=30");
 }
 
 void screen::Clear(void) const

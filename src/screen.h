@@ -12,6 +12,8 @@
 
 struct screen
 {
+    int width, height;
+
     screen(int width, int height);
     ~screen(void);
     void Clear(void) const;

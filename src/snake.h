@@ -5,6 +5,7 @@
 #include <vector>
 #include <random>
 #include <time.h>
+#include "screen.h"
 
 struct Vec2i
 {
@@ -13,22 +14,22 @@ struct Vec2i
 
 class snake
 {
-    const int mapW, mapH;
+    screen* scr;
     int x, y, direction, speed, score;
     bool alive, wrap;
     std::vector<Vec2i> tail;
     Vec2i fruit;
 
-    void AddTail(void);
+    void EatFruit(void);
     bool IsTail(int x, int y) const;
     void SetDirection(int direction);
 public:
-    snake(int mapW, int mapH, bool wrap);
+    snake(screen* scr, bool wrap);
     std::string Draw(void) const;
-    void Input(char key);
+    void Input(void);
     void Update(void);
-    inline bool IsAlive(void) const { return alive; }
-    inline int GetScore(void) const { return score; }
+    inline bool IsAlive(void) const { return alive; };
+    inline int GetScore(void) const { return score; };
 };
 
 #endif

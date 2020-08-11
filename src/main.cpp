@@ -1,7 +1,7 @@
 #include "screen.h"
 #include "snake.h"
 #include <string.h>
-#include <stdio.h>
+#include <cstdio>
 
 #ifdef unix
 # include <chrono>
@@ -71,11 +71,11 @@ int main(int argc, const char **argv)
     }
 
     screen scr(mapW, mapH);
-    snake player(mapW, mapH, wrap);
+    snake player(&scr, wrap);
 
     while(player.IsAlive())
     {
-        player.Input(scr.GetKey());
+        player.Input();
 
         player.Update();
 

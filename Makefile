@@ -21,7 +21,7 @@ EXE := $(BIN_DIR)/$(EXE)_windows.exe
 all: $(EXE)
 
 clean:
-	del $(OBJ_DIR)\*
+	del /Q $(OBJ_DIR)\*
 else
 EXE := $(BIN_DIR)/$(EXE)_linux
 all: $(EXE)
